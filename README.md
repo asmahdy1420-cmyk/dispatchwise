@@ -4,17 +4,33 @@
 
 Multi-location pharmacy order dispatch optimiser. A small Python library and a stateless FastAPI service that answer one question for a delivery pharmacy network: **which pharmacies should this order be picked up from, and which driver should take it?**
 
-Author: **Ahmed Mahdy** · Licence: MIT
+Author: Ahmed Mahdy. Licence: MIT.
 
 ## Why
 
 Pharmacy delivery is not food delivery. Stock is fragmented: a prescription with three items is often only fully available across two or three branches. A naive "nearest pharmacy, nearest driver" rule either fails the order or sends a driver on a long detour. dispatchwise makes that decision explicit, explainable and tunable:
 
-1. **Split decision** – fulfil from one pharmacy when possible, otherwise split across the fewest pharmacies.
-2. **Assignment scoring** – rank every (pickup set, driver) pair with a weighted cost that includes distance, traffic by hour, driver load and pharmacy queue.
-3. **Demand zones** (optional) – cluster historical orders with KMeans and suggest where idle drivers should wait.
+1. **Split decision**: fulfil from one pharmacy when possible, otherwise split across the fewest pharmacies.
+2. **Assignment scoring**: rank every (pickup set, driver) pair with a weighted cost that includes distance, traffic by hour, driver load and pharmacy queue.
+3. **Demand zones** (optional): cluster historical orders with KMeans and suggest where idle drivers should wait.
 
 Every plan returns a cost breakdown and ranked alternatives, so a dispatcher (human or system) can see *why* an assignment won.
+
+## Screenshots
+
+Output from a local run. The pharmacies, drivers and orders are made-up demo data, not production data.
+
+![FastAPI docs page](docs/screenshots/api-docs.png)
+
+The interactive docs page served at `/docs`.
+
+![Split and assign response](docs/screenshots/plan-split-assign.png)
+
+A real `POST /v1/plan` call. The order needs two products no single pharmacy holds in full, so it is split across two pickups and given to driver DR-7, with the cost broken down by term.
+
+![Demand zones](docs/screenshots/demand-zones.png)
+
+`dispatchwise zones` on a generated 200-order scenario (seed 42): four zones and where idle drivers are sent.
 
 ## Algorithm
 
@@ -35,7 +51,7 @@ Minimum set cover is NP-hard; the greedy rule is within a `ln(n)` factor of opti
 
 ### 2. Assignment cost
 
-For each candidate pickup set and each driver with spare capacity, the route is `driver → pickups (nearest-neighbour order) → customer`, and:
+For each candidate pickup set and each driver with spare capacity, the route runs from the driver through the pickups (in nearest-neighbour order) to the customer, and:
 
 ```
 cost = w_distance · route_km · traffic(hour)
