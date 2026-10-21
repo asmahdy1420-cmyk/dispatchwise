@@ -1,6 +1,6 @@
 # dispatchwise
 
-![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white) ![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white) ![Pydantic](https://img.shields.io/badge/Pydantic-v2-E92063?logo=pydantic&logoColor=white) ![Optimisation](https://img.shields.io/badge/logistics-dispatch_optimisation-7C3AED) ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 Multi-location pharmacy order dispatch optimiser. A small Python library and a stateless FastAPI service that answer one question for a delivery pharmacy network: **which pharmacies should this order be picked up from, and which driver should take it?**
 
